@@ -260,7 +260,11 @@ npm install -g github:openclaw/openclaw#main
 
 引导流程配置完成就可以顺利使用了。
 
-如果想要实现开机自动启动的话，下载我写的一个启动脚本startopenclaw.vbs，鼠标右键单击选择编辑，打开脚本文件，修改最后一行代码：
+如果想要实现开机自动启动的话，下载我写的一个启动脚本startopenclaw.vbs，
+
+https://pan.quark.cn/s/c92ff770effd
+
+鼠标右键单击选择编辑，打开脚本文件，修改最后一行代码：
 
 ws.run "wsl -d Ubuntu -- bash -lc '/home/用户名/.npm-global/bin/openclaw gateway > ~/openclaw.log 2>&1'", 0, False
 
