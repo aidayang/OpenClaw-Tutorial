@@ -1,5 +1,5 @@
 # OpenClaw-Tutorial
-openclaw AI助手本地电脑安装部署及配置微信聊天对话详细教程
+## 1、openclaw AI助手windows电脑安装部署及配置微信聊天对话详细教程
 
 
 openclaw是目前最火爆的开源应用，没有之一，它功能强大远超同类应用。以前AI只是你问它答，OpenClaw可以说是有了手，可以帮你做事，做很多事，如果利用的好，绝对是个利器。下面分享一下windows系统电脑本地安装部署教程，有时候可能会不在电脑前，这里我们配
@@ -186,3 +186,86 @@ OK，网关启动成功。你可以看到终端窗口里输出了很多蓝色文
 在打开的启动文件夹中，把启动龙虾.bat 文件复制进去即可。
 
 如需人工帮助联系：https://articles.zsxq.com/id_1tlnx05msvst.html
+
+## 2、windows电脑WSL2下安装OpenClwa及实现开机自动启动详细教程
+
+windows系统原生环境下运行openclaw多少还是会遇到点问题，虽然windows原生环境支持使用，但是WSL2仍是官方最推荐的方式。下面是windows系统电脑安装WSL2及OpenClaw详细教程。
+
+安装 WSL2
+
+以管理员身份打开 Windows 上的 PowerShell（右键开始菜单 -> Windows PowerShell (管理员)），输入以下命令：
+
+
+wsl --install
+
+这会自动安装 WSL2 和默认的 Ubuntu 发行版。系统提示需要重启电脑，我们重启电脑。
+
+重启电脑后，打开开始菜单，找到 Ubuntu 应用，点击打开它，等待几分钟初始化。
+
+系统会提示你创建一个UNIX username用户名，随便填
+
+然后会让你输入密码，输入密码时，不会显示，输入完成后按键盘回车
+
+提示重复输入新密码，输入，回车继续，创建完成，然后就会进入等待输入状态。
+
+<img width="719" height="316" alt="image" src="https://github.com/user-attachments/assets/650cd795-2eb0-4367-812b-f770fc91eb5e" />
+
+在终端里输入以下命令，确保系统是最新的：
+
+
+sudo apt update && sudo apt upgrade -y
+
+更新时会提示要输入密码，先输入密码确认，然后开始自动更新。
+
+安装OpenClaw
+
+先安装 Node.js，在 Ubuntu 终端里依次运行下面命令：
+
+
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+
+sudo apt install -y nodejs
+
+安装浏览器，如果不做浏览器自动化任务的话，可以不用装
+
+npm install playwright
+
+npx playwright install chromium
+
+如果在以后执行浏览器自动化任务时报错缺少libXXX.so库，直接运行下面命令自动补全：
+
+npx playwright install-deps
+
+安装 OpenClaw
+
+依次运行下面命令安装openclaw，
+
+npm install -g openclaw@latest
+
+openclaw onboard --install-daemon
+
+如果上面命令无法安装的话，运行下面官方推荐一键安装命令：
+
+curl -fsSL https://openclaw.ai/install.sh | bash
+
+或从 GitHub 主仓库安装实时最新版
+
+npm install -g github:openclaw/openclaw#main
+
+如果终端窗口长时间没有变化，打开任务管理器，看看网卡流量，是不是正在下载文件中
+
+如果无法安装的话，先解决你的网络问题。
+
+顺利安装的话，稍后会自动启动引导流程，可以查看文章前半部分描述
+
+引导流程配置完成就可以顺利使用了。
+
+如果想要实现开机自动启动的话，下载我写的一个启动脚本startopenclaw.vbs，鼠标右键单击选择编辑，打开脚本文件，修改最后一行代码：
+
+ws.run "wsl -d Ubuntu -- bash -lc '/home/用户名/.npm-global/bin/openclaw gateway > ~/openclaw.log 2>&1'", 0, False
+
+把【用户名】这几个字，改成上面安装WSL2时你创建的UNIX username用户名，修改完保存关闭
+
+按电脑win+R键，输入：shell:startup，打开启动文件夹后，把这个vbs文件复制进去即可。每次重启电脑时，Openclaw 网关会自动运行。
+
+我CPU是I7，不处理任务时后台虚拟机进程vmmem占用CPU约0.1%，占用内存约2.4G。
